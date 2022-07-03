@@ -15,7 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from polls import views
+from django.conf.urls import include
+from polls.views import RiseSetView
+
 
 urlpatterns = [
+    path('city/<str:post_pk>/date/<int:pk>', RiseSetView.as_view()),
     path('admin/', admin.site.urls),
 ]
