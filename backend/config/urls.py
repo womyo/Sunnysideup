@@ -17,10 +17,14 @@ from django.contrib import admin
 from django.urls import path
 from polls import views
 from django.conf.urls import include
-from polls.views import RiseSetView
+from polls.views import RiseSetView, PredictView
+from rest_framework import routers, permissions
 
+router = routers.DefaultRouter()
 
 urlpatterns = [
+    path(r'', include(router.urls)),
     path('city/<str:post_pk>/date/<int:pk>', RiseSetView.as_view()),
+    path('predict', PredictView.as_view()),
     path('admin/', admin.site.urls),
 ]
