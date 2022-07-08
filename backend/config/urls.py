@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from polls import views
 from django.conf.urls import include
-from polls.views import RiseSetView, PredictView
+from polls.views import RiseSetView, PredictView, RiseView, SetView
 from rest_framework import routers, permissions
 
 router = routers.DefaultRouter()
@@ -25,6 +25,8 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path(r'', include(router.urls)),
     path('city/<str:post_pk>/date/<int:pk>', RiseSetView.as_view()),
-    path('predict', PredictView.as_view()),
+    path('date/<str:pk_1>/lat/<str:pk_2>/lon/<str:pk_3>/standard/<str:pk_4>', PredictView.as_view()),
+    path('api/rise/', RiseView.as_view()),
+    path('api/set/', SetView.as_view()),
     path('admin/', admin.site.urls),
 ]

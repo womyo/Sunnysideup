@@ -3,5 +3,5 @@ module.exports = defineConfig({
   lintOnSave: false,
   transpileDependencies: [
     'vuetify'
-  ]
+  ],
 })
