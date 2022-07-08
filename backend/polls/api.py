@@ -2,11 +2,11 @@ from urllib.parse import urlencode, unquote, quote_plus
 from urllib.request import urlopen
 import json
 import xmltodict
-
+from decouple import config
 
 class Api:
     def __init__(self, city, locDate):
-        self.serviceKey = 'cl47XS7A0i8vg0NZNiXYCR5+9Df0fCXMZ+tyIPdr/va2clSHIMvlnzFeTqrmgZZtO8ARtV2qB8+R8bfVJmB9yQ=='
+        self.serviceKey = config('SERVICE_KEY')
         self.decodedServiceKey = unquote(self.serviceKey, 'UTF-8')
         self.city = city
         self.locDate = locDate
