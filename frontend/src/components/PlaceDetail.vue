@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-parallax height='300' class="placeImg" v-bind:style="{ backgroundImage: `url('${this.imgLink}')` }">
-            <h1>{{ this.cityName }}</h1>
+        <v-parallax height='350' class="placeImg" v-bind:style="{ backgroundImage: `url('${this.imgLink}')` }">
+            <h1 class="cityName"><span>{{ this.cityName }}</span></h1>
         </v-parallax>
         <div class="detail">
             <div class="sunrise">
@@ -21,6 +21,12 @@
     background: no-repeat center;
     background-size: cover;
     text-align: center;
+}
+.cityName {
+    color: white;
+}
+.cityName span {
+    background-color: rgba( 0, 0, 0, 0.2 );
 }
 .detail {
     text-align: center;
