@@ -83,7 +83,7 @@
                             v-model="standard_time"
                             :rules="[() => !!standard_time || 'This field is required']"
                             label="Standard Time*"
-                            hint="The standard time longitude used by the country"
+                            hint="The standard timezone used by the country"
                             persistent-hint
                             required
                             ></v-text-field>
@@ -180,7 +180,6 @@ import axios from 'axios'
                     this.$refs[f].reset()
                 })
             }
-            this.$store.dispatch('getRiseInfo')
 
       },
     }

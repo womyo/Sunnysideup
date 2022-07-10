@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from .api import Api
 from .predictRiseSet import PredictRiseSet
+from .placeImage import PlaceImage
 from rest_framework.views import APIView
 from .models import Rise, Set
 from .serializer import RiseSerializer, SetSerializer
@@ -24,7 +25,12 @@ class PredictView(APIView):
 
 class RiseView(APIView):
     def post(self, request):
-        place_serializer = RiseSerializer(data=request.data)
+        req_data = request.data
+        place_name = req_data['name'].split(",")[0]
+        place_image = PlaceImage(place_name + ' sunrise')
+        image_link = place_image.getLink()
+        req_data['image_link'] = image_link
+        place_serializer = RiseSerializer(data=req_data)
 
         if place_serializer.is_valid():
             place_serializer.save()
@@ -39,7 +45,13 @@ class RiseView(APIView):
 
 class SetView(APIView):
     def post(self, request):
-        place_serializer = SetSerializer(data=request.data)
+        req_data = request.data
+        place_name = req_data['name'].split(",")[0]
+        place_image = PlaceImage(place_name + ' sunset')
+        image_link = place_image.getLink()
+        req_data['image_link'] = image_link
+
+        place_serializer = SetSerializer(data=req_data)
 
         if place_serializer.is_valid():
             place_serializer.save()

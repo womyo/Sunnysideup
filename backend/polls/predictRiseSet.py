@@ -24,7 +24,8 @@ class PredictRiseSet:
         w = math.acos((math.sin(a) - (math.sin(delta) * math.sin(theta))) / (math.cos(delta) * math.cos(theta)))
         w = math.degrees(w)
 
-        longitudeDiff = int((self.standard-self.longitude)/15*60)
+        standard_longitude = self.standard*15
+        longitudeDiff = int((standard_longitude-self.longitude)/15*60)
 
         setHour = int(w // 15) + 12
         setMinute = round(w % 15 / 15 * 60)
