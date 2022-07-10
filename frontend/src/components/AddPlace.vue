@@ -87,6 +87,17 @@
                             required
                             ></v-text-field>
                         </v-col>
+                        <v-col
+                            cols="12"
+                        >
+                            <v-text-field
+                            ref="image_link"
+                            v-model="image_link"
+                            label="Image Url"
+                            hint="Please make it empty if you want a Random Image"
+                            persistent-hint
+                            ></v-text-field>
+                        </v-col>
                     </v-row>
                 </v-container>  
                 <small>*indicates required field</small>
@@ -123,6 +134,7 @@ import axios from 'axios'
       latitude: null,
       longitude: null,
       standard_time: null,
+      image_link: null,
       formHasErrors: false,
       url: null,
     }),
@@ -161,7 +173,8 @@ import axios from 'axios'
                 'name': this.name,
                 'latitude': this.latitude,
                 'longitude': this.longitude,
-                'standard_time': this.standard_time
+                'standard_time': this.standard_time,
+                'image_link': this.image_link
             }
             await axios
                 .post(this.url, request_data)
@@ -177,6 +190,7 @@ import axios from 'axios'
                     this.$refs[f].reset()
                 })
             }
+            this.$refs['image_link'].reset()
 
       },
     }

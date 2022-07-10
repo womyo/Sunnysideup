@@ -1,3 +1,4 @@
+from email.mime import image
 from re import L
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -26,10 +27,14 @@ class PredictView(APIView):
 class RiseView(APIView):
     def post(self, request):
         req_data = request.data
-        place_name = req_data['name'].split(",")[0]
-        place_image = PlaceImage(place_name + ' sunrise')
-        image_link = place_image.getLink()
-        req_data['image_link'] = image_link
+        image_link = req_data['image_link']
+
+        # get image from image search API
+        if image_link == None:
+            place_name = req_data['name'].split(",")[0]
+            place_image = PlaceImage(place_name + ' sunrise')
+            req_data['image_link'] = place_image.getLink()
+
         place_serializer = RiseSerializer(data=req_data)
 
         if place_serializer.is_valid():
@@ -51,10 +56,13 @@ class RiseView(APIView):
 class SetView(APIView):
     def post(self, request):
         req_data = request.data
-        place_name = req_data['name'].split(",")[0]
-        place_image = PlaceImage(place_name + ' sunset')
-        image_link = place_image.getLink()
-        req_data['image_link'] = image_link
+        image_link = req_data['image_link']
+
+        # get image from image search API
+        if image_link == None:
+            place_name = req_data['name'].split(",")[0]
+            place_image = PlaceImage(place_name + ' sunrise')
+            req_data['image_link'] = place_image.getLink()
 
         place_serializer = SetSerializer(data=req_data)
 

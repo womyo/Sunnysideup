@@ -29,7 +29,6 @@
             ></v-date-picker>
         </v-menu>
         </v-col>
-        <!-- <v-btn color="primary" @click="getData">get data</v-btn> -->
     </div>
 </template>
 
