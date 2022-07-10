@@ -24,6 +24,7 @@
 }
 .cityName {
     color: white;
+    // c
 }
 .cityName span {
     background-color: rgba( 0, 0, 0, 0.2 );
