@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <!-- <router-view/> -->
-    <!-- <AddPlace></AddPlace> -->
+    <AddPlace></AddPlace>
     <!-- <Sunriseset></Sunriseset> -->
     <Map></Map>
   </v-app>

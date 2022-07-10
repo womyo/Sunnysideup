@@ -4,27 +4,44 @@ import axios from "axios";
 
 Vue.use(Vuex)
 
-export default {
+const placeStore =  {
+    namespace: true,
     state: {
-        riseInfo: [],
+        sunriseInfo: [],
+        sunsetInfo: [],
     },
     mutations: {
-        getRiseInfo(state, payload) {
-            state.riseInfo = payload
+        SE_SUNRISE_INFO (state, payload) {
+            state.sunriseInfo = payload
+        },
+        SE_SUNSET_INFO(state, payload) {
+            state.sunsetInfo = payload
         }
     },
     getters:{
-        storedRiseInfo(state) {
-            return state.riseInfo;
+        GE_SUNRISE_INFO (state) {
+            return state.sunriseInfo;
+        },
+        GE_SUNSET_INFO (state) {
+            return state.sunsetInfo;
         },
     },
     actions:{
-        async getRiseInfo({ commit }) {
+        async SUNRISE_INFO ({ commit }) {
             await axios
                 .get('/api/rise/')
                 .then(response => {
-                    console.log(response.data)
-                    commit("getRiseInfo", response.data);
+                    commit("SE_SUNRISE_INFO", response.data);
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
+        async SUNSET_INFO ({ commit }) {
+            await axios
+                .get('/api/set/')
+                .then(response => {
+                    commit("SE_SUNSET_INFO", response.data);
                 })
                 .catch(error => {
                     console.log(error)
@@ -32,3 +49,4 @@ export default {
         }
     }
 }
+export default placeStore;
