@@ -1,9 +1,6 @@
 <template>
   <v-app id="app">
-    <!-- <router-view/> -->
-    <AddPlace></AddPlace>
-    <!-- <Sunriseset></Sunriseset> -->
-    <Map></Map>
+    <router-view/>
   </v-app>
 </template>
 
@@ -15,22 +12,10 @@
 </style>
 
 <script>
-import Sunriseset from './components/Sunriseset';
-import Map from './components/Map';
-import AddPlace from './components/AddPlace';
-import axios from 'axios';
 export default {
   name: 'App',
 
   components: {
-    Sunriseset,
-    Map,
-    AddPlace
   },
-
-  data: () => ({
-    riseInfo: [],
-    setInfo: [],
-  }),
 };
 </script>

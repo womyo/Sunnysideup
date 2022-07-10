@@ -1,13 +1,14 @@
 import urllib.request
 import json
+from decouple import config
 
 class PlaceImage():
     def __init__(self, encText):
         self.encText = encText
 
     def getLink(self):
-        NAVER_CLIENT_ID = 'FbRzjA99jnPC4ASrx0FE'
-        NAVER_CLIENT_SECRET = 'o3mV9BGdCG'
+        NAVER_CLIENT_ID = config('NAVER_CLIENT_ID')
+        NAVER_CLIENT_SECRET = config('NAVER_CLIENT_SECRET')
         self.encText = urllib.parse.quote(self.encText)
         url = f"https://openapi.naver.com/v1/search/image?query={self.encText}" \
             f"&display=1&sort=sim"
