@@ -1,6 +1,5 @@
 <template>
-    <!-- <v-row> -->
-        <v-dialog
+    <v-dialog
         v-model="dialog"
         persistent
         max-width="600px"
@@ -110,8 +109,7 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
-        </v-dialog>
-    <!-- </v-row> -->
+    </v-dialog>
 </template>
 
 <script>
@@ -153,7 +151,6 @@ import axios from 'axios'
                     this.$refs[f].validate(true)
                 })
 
-            // 저장
             if (this.sun_state == "Rise") {
                 this.url = '/api/rise/'
             }

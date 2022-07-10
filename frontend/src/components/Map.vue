@@ -34,11 +34,13 @@
         </v-row>
         <v-row>
             <v-col id="map-wrapper" class="map-wrapper">
-                <div class='box' v-show="upHere" :style="{left:xPosition, top:yPosition}" >
-                    <img class="coverImg" :src=this.imageLink />
-                    <div>{{ this.cityName }}</div>
-                    <div>{{ this.sunrise }}</div>
-                    <div>{{ this.sunset }}</div>
+                <div class='box' v-show="upHere" :style="{left:xPosition, top:yPosition}" @click="iconClick">
+                    <img class="coverImg" :src=this.imgLink />
+                    <div class="text">
+                        <div>{{ this.cityName }}</div>
+                        <div>{{ this.sunrise }}</div>
+                        <div>{{ this.sunset }}</div>
+                    </div>
                 </div>
             </v-col >
         </v-row>
@@ -63,14 +65,19 @@
   }
   .box {
     position: absolute;
-    background-color: black;
-    color: white;   
+    color: black;   
     width: auto;
     height: auto;
   }
   .coverImg {
-    width: 30%;
-    height: 30%;
+    max-width: 150px;
+    max-height: 100px;
+    width: auto;
+    height: auto;
+    vertical-align: bottom;
+  }
+  .text {
+    background-color: rgba( 255, 255, 255, 0.5 );
   }
 }
 </style>
@@ -94,7 +101,7 @@ export default {
         upHere : false,
         xPosition: 0,
         yPosition: 0,
-        imageLink: '',
+        imgLink: '',
         cityName: '',
         sunrise: '',
         sunset: '',
@@ -184,10 +191,6 @@ export default {
 
     drawMap() {
         const geojson = MAP_GEOJSON;
-        const center = d3.geoCentroid(geojson);
-
-        let centered = undefined;
-
         const divWidth = document.getElementById("map-wrapper").clientWidth;
         const width = divWidth
         const height = width * 0.5;
@@ -215,9 +218,9 @@ export default {
         const widthScale = (bounds[1][0] - bounds[0][0]) / width; 
         const heightScale = (bounds[1][1] - bounds[0][1]) / height; 
         const scale = 0.95 / Math.max(widthScale, heightScale);
-        const xoffset = width/2 - scale * (bounds[1][0] + bounds[0][0]) /2 + 0; 
-        const yoffset = height/2 - scale * (bounds[1][1] + bounds[0][1])/2 + 0; 
-        const offset = [xoffset, yoffset];
+        const xOffset = width/2 - scale * (bounds[1][0] + bounds[0][0]) /2 + 0; 
+        const yOffset = height/2 - scale * (bounds[1][1] + bounds[0][1])/2 + 0; 
+        const offset = [xOffset, yOffset];
         this.projection.scale(scale).translate(offset);
 
 
@@ -263,18 +266,13 @@ export default {
         .attr('y' ,  d=> this.projection([d.longitude, d.latitude-(-2)])[1])
         .attr("xlink:href", require("../static/data/sunrise.svg")) 
         .on('mouseover', d =>{
-            this.upHere = true
-            this.xPosition = (d.pageX)  + 'px'
-            this.yPosition = (d.pageY - 100)+ 'px'
-            const target =  d.target.__data__
-            this.imageLink = target.image_link
-            this.cityName = target.name
-            this.getData(target.latitude, target.longitude, target.standard_time) 
+            this.iconOver(d)
         })
         .on('mouseleave', d =>{
             this.upHere = false
         })
         .on('click', d =>{
+            this.iconClick()
         })
 
         await setIcon
@@ -288,19 +286,26 @@ export default {
         .attr('y' ,  d=> this.projection([d.longitude, d.latitude-(-2)])[1])
         .attr("xlink:href", require("../static/data/sunset.svg")) 
         .on('mouseover', d =>{
-            this.upHere = true
-            this.xPosition = (d.pageX)  + 'px'
-            this.yPosition = (d.pageY - 100)+ 'px'
-            const target =  d.target.__data__
-            this.imageLink = target.image_link
-            this.cityName = target.name
-            this.getData(target.latitude, target.longitude, target.standard_time)
+            this.iconOver(d)
         })
         .on('mouseleave', d =>{
             this.upHere = false
         })
         .on('click', d =>{
+            this.iconClick()
         })
+    },
+    iconOver(d) {
+        this.upHere = true
+        this.xPosition = (d.pageX - 100)  + 'px'
+        this.yPosition = (d.pageY - 200)+ 'px'
+        const target =  d.target.__data__
+        this.imgLink = target.image_link
+        this.cityName = target.name
+        this.getData(target.latitude, target.longitude, target.standard_time)
+    },
+    iconClick() {
+        this.$router.push({ path: "/Place", query: { imgLink: this.imgLink, cityName: this.cityName, sunrise: this.sunrise, sunset: this.sunset} })
     }
   }
 }

@@ -40,6 +40,11 @@ class RiseView(APIView):
     
     def get(self, request):
         queryset = Rise.objects.all()
+        name =  request.query_params.get('name')
+
+        if name is not None:
+            queryset = queryset.filter(name=name)
+
         serialized_rise = RiseSerializer(queryset, many=True)
         return Response(data=serialized_rise.data)
 
@@ -61,5 +66,10 @@ class SetView(APIView):
 
     def get(self, request):
         queryset = Set.objects.all()
+        name =  request.query_params.get('name')
+
+        if name is not None:
+            queryset = queryset.filter(name=name)
+            
         serialized_set = SetSerializer(queryset, many=True)
         return Response(data=serialized_set.data)
