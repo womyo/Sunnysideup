@@ -53,6 +53,25 @@ class RiseView(APIView):
         serialized_rise = RiseSerializer(queryset, many=True)
         return Response(data=serialized_rise.data)
 
+    def put(self, request):
+        req_data = request.data
+        place_obj = Rise.objects.get(name=req_data['name'])
+        image_link = req_data['image_link']
+
+        # get image from image search API
+        if image_link == None:
+            place_name = req_data['name'].split(",")[0]
+            place_image = PlaceImage(place_name + ' sunrise')
+            req_data['image_link'] = place_image.getLink()
+
+        place_serializer = RiseSerializer(place_obj, data=req_data)
+
+        if place_serializer.is_valid():
+            place_serializer.save()
+            return Response(place_serializer.data)
+        else:
+            return Response(place_serializer.errors)
+
 class SetView(APIView):
     def post(self, request):
         req_data = request.data
@@ -61,7 +80,7 @@ class SetView(APIView):
         # get image from image search API
         if image_link == None:
             place_name = req_data['name'].split(",")[0]
-            place_image = PlaceImage(place_name + ' sunrise')
+            place_image = PlaceImage(place_name + ' sunset')
             req_data['image_link'] = place_image.getLink()
 
         place_serializer = SetSerializer(data=req_data)
@@ -81,3 +100,22 @@ class SetView(APIView):
             
         serialized_set = SetSerializer(queryset, many=True)
         return Response(data=serialized_set.data)
+
+    def put(self, request):
+        req_data = request.data
+        place_obj = Set.objects.get(name=req_data['name'])
+        image_link = req_data['image_link']
+
+        # get image from image search API
+        if image_link == None:
+            place_name = req_data['name'].split(",")[0]
+            place_image = PlaceImage(place_name + ' sunset')
+            req_data['image_link'] = place_image.getLink()
+
+        place_serializer = SetSerializer(place_obj, data=req_data)
+
+        if place_serializer.is_valid():
+            place_serializer.save()
+            return Response(place_serializer.data)
+        else:
+            return Response(place_serializer.errors)
