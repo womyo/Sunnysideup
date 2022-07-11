@@ -35,4 +35,4 @@ class PredictRiseSet:
         riseMinute = round((24 - (setHour+setMinute/60) - riseHour)*60)
         riseTime = dt.timedelta(hours=riseHour, minutes=riseMinute) + dt.timedelta(minutes=longitudeDiff)
 
-        return str(riseTime), str(setTime)
+        return str(riseTime)[:-3], str(setTime)[:-3]

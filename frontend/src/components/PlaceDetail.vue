@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-parallax height='350' class="placeImg" v-bind:style="{ backgroundImage: `url('${this.imgLink}')` }">
+        <v-parallax v-if="this.image_link" height='350' class="placeImg" v-bind:style="{ backgroundImage: `url('${this.image_link}')` }">
             <h1 class="cityName"><span>{{ this.cityName }}</span></h1>
         </v-parallax>
         <div class="detail">
@@ -24,7 +24,6 @@
 }
 .cityName {
     color: white;
-    // c
 }
 .cityName span {
     background-color: rgba( 0, 0, 0, 0.2 );
@@ -41,13 +40,13 @@
 }
 .sunrise {
     display: inline-block;
-    width: 25%;
+    width: 20%;
     font-size:xx-large;
     font-family:'digital-clock-font';
 }
 .sunset {
     display: inline-block;
-    width: 25%;
+    width: 20%;
     margin-left: 15%;
     font-size:xx-large;
     font-family:'digital-clock-font';
@@ -55,24 +54,63 @@
 </style>
 
 <script>
+import axios from 'axios'
 
 export default {
     data() {
         return {
             cityName: null,
             cityInfo: null,
-            imgLink: null,
-            show: false,
+            sunState: null,
+            date: null,
+            latitude: null,
+            longitude: null,
+            standard_time: null,
+            image_link: null,
+            sunrise: null,
+            sunset: null,
         }
     },
     created() {
-        this.imgLink = this.$route.query.imgLink
         this.cityName = this.$route.query.cityName
-        this.sunrise = this.$route.query.sunrise
-        this.sunset = this.$route.query.sunset
-        // this.show = true
+        this.sunState = this.$route.query.sunState
+        this.date = this.$route.query.date
+    },
+    async mounted() {
+        await this.getInfo()
+        await this.getData()
     },
     methods: {
+        async getInfo() {
+            const url = `/api/${this.sunState}?name=${this.cityName}`
+
+            await axios
+                .get(url)
+                .then(response => {
+                    this.cityInfo = response.data[0]
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
+        async getData() {
+            this.image_link = this.cityInfo.image_link
+            this.latitude = this.cityInfo.latitude
+            this.longitude = this.cityInfo.longitude
+            this.standard_time = this.cityInfo.standard_time
+
+            const url = `/date/${this.date}/lat/${this.latitude}/lon/${this.longitude}/standard/${this.standard_time}`
+            
+            await axios
+                .get(url)
+                .then(response => {
+                    this.sunrise = response.data.sunrise
+                    this.sunset = response.data.sunset
+                })
+                .catch(error => {
+                        console.log(error)
+                })
+        }
   }
 }
 </script>

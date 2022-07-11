@@ -11,7 +11,7 @@
             v-bind="attrs"
             v-on="on"
             >
-            Add Place
+            Edit Place
             </v-btn>
         </template>
         <v-card ref="form">
@@ -137,6 +137,8 @@ import axios from 'axios'
       image_link: null,
       formHasErrors: false,
       url: null,
+      cityInfo: null,
+      image_link: null,
     }),
     computed: {
       form () {
@@ -149,13 +151,38 @@ import axios from 'axios'
         }
       },
     },
-    
+    created() {
+        this.name = this.$route.query.cityName
+        this.sun_state = this.$route.query.sunState
+    },
+    async mounted() {
+        await this.getInfo()
+        this.setData()
+    },
     methods: {
+        async getInfo() {
+            await axios
+                .get(`/api/${this.sun_state}?name=${this.name}`)
+                .then(response => {
+                    this.cityInfo = response.data[0]
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
+
+        setData() {
+            this.image_link = this.cityInfo.image_link
+            this.latitude = this.cityInfo.latitude
+            this.longitude = this.cityInfo.longitude
+            this.standard_time = this.cityInfo.standard_time
+        },
+
         async submit () {
             this.formHasErrors = false
             this.dialog = false
-            this.url = `/api/${this.sun_state}/`
-
+            this.url = `/api/${this.sun_state}/?name=${this.name}`
+            
             Object.keys(this.form).forEach(f => {
                 if (!this.form[f]) {
                     this.formHasErrors = true
@@ -172,21 +199,13 @@ import axios from 'axios'
                 'image_link': this.image_link
             }
             await axios
-                .post(this.url, request_data)
+                .put(this.url, request_data)
                 .then(resonse => {
                     console.log(resonse.data)
                 })
                 .catch(error => {
                     console.log(error)
                 })
-
-            if (!this.formHasErrors & !this.dialog){
-                Object.keys(this.form).forEach(f => {
-                    this.$refs[f].reset()
-                })
-            }
-            this.$refs['image_link'].reset()
-
       },
     }
   }

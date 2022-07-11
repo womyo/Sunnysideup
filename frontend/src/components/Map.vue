@@ -34,7 +34,7 @@
         </v-row>
         <v-row>
             <v-col id="map-wrapper" class="map-wrapper">
-                <div class='box' v-show="upHere" :style="{left:xPosition, top:yPosition}" @click="iconClick">
+                <div class='box' v-show="upHere" :style="{left:xPosition, top:yPosition}">
                     <img class="coverImg" :src=this.imgLink />
                     <div class="text">
                         <div>{{ this.cityName }}</div>
@@ -115,6 +115,7 @@ export default {
         svg: null,
         g: null,
         projection: null,
+        state: null,
     }
   },
   created() {
@@ -126,15 +127,6 @@ export default {
     // }),
     // ...mapGetters(["GE_SUNRISE_INFO"]),
     // ...mapGetters(["GE_SUNSET_INFO"]),
-    form () {
-        return {
-          name: this.name,
-          sun_state: this.sun_state,
-          latitude: this.latitude,
-          longitude: this.longitude,
-          standard_time: this.standard_time,
-        }
-      },
   },
 //   beforeMount() {
 //     this.$store.dispatch('SUNRISE_INFO')
@@ -272,7 +264,8 @@ export default {
             this.upHere = false
         })
         .on('click', d =>{
-            this.iconClick()
+            this.state = 'rise'
+            this.iconClick(this.state)
         })
 
         await setIcon
@@ -292,7 +285,8 @@ export default {
             this.upHere = false
         })
         .on('click', d =>{
-            this.iconClick()
+            this.state = 'set'
+            this.iconClick(this.state)
         })
     },
     iconOver(d) {
@@ -304,8 +298,8 @@ export default {
         this.cityName = target.name
         this.getData(target.latitude, target.longitude, target.standard_time)
     },
-    iconClick() {
-        this.$router.push({ path: "/Place", query: { imgLink: this.imgLink, cityName: this.cityName, sunrise: this.sunrise, sunset: this.sunset} })
+    iconClick(s) {
+        this.$router.push({ path: "/Place", query: { sunState: s, cityName: this.cityName, date: this.formatDate(this.date)} })
     }
   }
 }
